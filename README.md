@@ -3,6 +3,13 @@
 
 Code, Slides, &amp; Materials for our Advanced Workshop Series, Fall Quarter 2018
 
+#### Link to Slides Used
+
+*Workshop 1*: [https://tinyurl.com/aiadvancedf181](https://tinyurl.com/aiadvancedf181)
+
+
+#### Setup Instructions
+
 ### Getting a Python and Machine Learning Environment Up and Running
 
 Please complete these tasks before the workshop in order to hit the ground running! Don’t worry if you run into some errors though, we will have mentors on hand to help you through setup.
