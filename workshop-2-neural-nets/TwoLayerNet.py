@@ -29,6 +29,13 @@ class NeuralNetwork(object):
     - output_size: The number of classes C.
     """
     self.params = {}
+
+    # TODO: Initialize the weights and biases according to the shapes above
+    self.params['W1'] = None
+    self.params['b1'] = None
+    self.params['W2'] = None
+    self.params['b2'] = None
+
     self.params['W1'] = std * np.random.randn(hidden_size, input_size)
     self.params['b1'] = np.zeros(hidden_size)
     self.params['W2'] = std * np.random.randn(output_size, hidden_size)
@@ -60,40 +67,21 @@ class NeuralNetwork(object):
     W2, b2 = self.params['W2'], self.params['b2']
     N, D = X.shape
     # Compute the forward pass
-    scores = None
 
-    # ================================================================ #
-    # YOUR CODE HERE:
-    #   Calculate the output scores of the neural network.  The result
-    #   should be (C, N). As stated in the description for this class,
-    #   there should not be a ReLU layer after the second FC layer.
-    #   The output of the second FC layer is the output scores. Do not
-    #   use a for loop in your implementation.
-    # ================================================================ #
+    z1 = None # TODO: compute the result of the forward through the first layer of the network (before the nonlinearity is applied.)
+    h1 = None # TODO: apply the RELU nonlinearity to the above result.
+    z2 = None # TODO: compute the result of passing h1 through the next layer in the network.
+    scores = z2
+
     z1 = X.dot(W1.T) + b1
     h1 = z1 * (z1 > 0)
     z2 = h1.dot(W2.T) + b2
     scores = z2
-    
-    # ================================================================ #
-    # END YOUR CODE HERE
-    # ================================================================ #
 
   
     # If the targets are not given then jump out, we're done
     if y is None:
       return scores
-
-    # Compute the loss
-    loss = None
-
-    # ================================================================ #
-    # YOUR CODE HERE:
-    #   Calculate the loss of the neural network.  This includes the 
-    #   softmax loss and the L2 regularization for W1 and W2. Store the 
-    #   total loss in the variable loss.  Multiply the regularization
-    #   loss by 0.5 (in addition to the factor reg).
-    # ================================================================ #
 
     # scores is num_examples by num_classes
 
@@ -105,18 +93,16 @@ class NeuralNetwork(object):
     # now, pick out the correct ones, sum, and norm
     d_loss = -np.sum(np.log(score_probs[np.arange(scores.shape[0]), y].clip(min=np.finfo(float).eps))) / scores.shape[0]
     # penalize by frobenius norm
+    r_loss = None # TODO: Write out the contribution that L2-regularization makes to the overall loss function.
     r_loss = .5 * reg * (np.sum(W1 **2) + np.sum(W2 ** 2))
-    #loss+= 0.5 * reg * np.sum(W1**2) + 0.5 * reg * np.sum(W2 ** 2)
+    loss = None # TODO: Compute the overall loss as the regularized cross-entropy loss.
     loss = d_loss + r_loss
 
-    # ================================================================ #
-    # END YOUR CODE HERE
-    # ================================================================ #
 
     grads = {}
 
     # ================================================================ #
-    # YOUR CODE HERE:
+    # TODO
     #   Implement the backward pass.  Compute the derivatives of the 
     #   weights and the biases.  Store the results in the grads
     #   dictionary.  e.g., grads['W1'] should store the gradient for 
@@ -126,38 +112,39 @@ class NeuralNetwork(object):
     # calculate the grad with respect to softmax
     p = score_probs.copy()
     # to account for the case where w_j = w_{y_i} (i.e. our class corresponds to the correct class label)
-    # in the unvectorized version we multiplied by -x[i], so here we -1 
     p[range(X.shape[0]),y]-=1
     p/=X.shape[0]
-    # now back to the bias
-    # the chain rule means just times it by 1
+    # Given p, the incoming gradient into the 2nd layer of the network, implement backprop for the rest of the network's weights and biases.
+    # now backprop into the bias
     # the second layer is h_2 = W_2(h_1) + b_2
-    # so for the bias, it's just the incoming gradient times 1
+    # so for the bias, given the gradient, what is the gradient with respect to the bias?
+    dldb2 = None # TODO: Implement backpropagation into the biases for the 2nd layer.
     dldb2 = np.sum(p, axis = 0)
-    # now back to the second layer weights
+    # now backprop to the second layer weights
     # since we computed Wh1 where h1 was the input into this layer, derivative is h1, and add derivative of regularization func
+    dldw2 = None # TODO: Implement backpropagation into the weights for the 2nd layer.
     dldw2 = p.T.dot(h1) + reg * W2
     # calculate the gradient that we send back
     # basically this is the gradient of the inputs into this layer, h1
     # since we did Wh1 the grad is just W, times p  for the chain rule
-    dLdh1 = p.dot(W2) # this is the "upstream gradient" for the first layer, where as p was the upstream for second layer
+    dLdh1 = None # TODO: this is the "upstream gradient" for the first layer, where as p was the upstream for second layer
+    dLdh1 = p.dot(W2)
     # we have h_1 = relu(W_1x + b_1)
     # now back into the relu.
+    dldz = None # TODO: backprop into the relu
     dldz = dLdh1 * (z1 > 0)
     # now back into the first layer bias
+    dldb1 = None # TODO: Implement backprop into the first layer biases.
     dldb1 = np.sum(dldz, axis = 0)
-    dldw1 = dldz.T.dot(X) + reg * W1
     # now back into the first layer weights
+    dldw1 = None # TODO: implement backprop into the first layer weights
+    dldw1 = dldz.T.dot(X) + reg * W1
 
     # assign grads
     grads['b2'] = dldb2
     grads['W2'] = dldw2
     grads['b1'] = dldb1
     grads['W1'] = dldw1
-    # ================================================================ #
-    # END YOUR CODE HERE
-    # ================================================================ #
-
     return loss, grads
 
   def train(self, X, y, X_val, y_val,
@@ -189,38 +176,27 @@ class NeuralNetwork(object):
     val_acc_history = []
 
     for it in np.arange(num_iters):
-      X_batch = None
-      y_batch = None
+      batch_indices = None # TODO: create a minibatch by sampling indices here.
+      batch_indices = np.random.choice(X.shape[0], batch_size)
+      X_batch = X[batch_indices]
+      y_batch = y[batch_indices]
 
-      # ================================================================ #
-      # YOUR CODE HERE:
-      #   Create a minibatch by sampling batch_size samples randomly.
-      # ================================================================ #
-      indices = np.random.choice(X.shape[0], batch_size)
-      X_batch = X[indices]
-      y_batch = y[indices]
-
-      # ================================================================ #
-      # END YOUR CODE HERE
-      # ================================================================ #
 
        # Compute loss and gradients using the current minibatch
       loss, grads = self.loss(X_batch, y=y_batch, reg=reg)
       loss_history.append(loss)
 
-      # ================================================================ #
-      # YOUR CODE HERE:
-      #   Perform a gradient descent step using the minibatch to update
-      #   all parameters (i.e., W1, W2, b1, and b2).
-      # ================================================================ #
-      self.params['b1']+=-learning_rate*grads['b1']
-      self.params['W1']+=-learning_rate*grads['W1']
-      self.params['b2']+=-learning_rate*grads['b2']
-      self.params['W2']+=-learning_rate*grads['W2']
+      # TODO: perform a gradient descent update for all the parameters.
+      # self.params['b1'] = None
+      # self.params['W1'] = None
+      # self.params['b2'] = None
+      # self.params['W2'] = None
 
-      # ================================================================ #
-      # END YOUR CODE HERE
-      # ================================================================ #
+
+      self.params['b1'] = self.params['b1']-learning_rate*grads['b1']
+      self.params['W1'] = self.params['W1']-learning_rate*grads['W1']
+      self.params['b2'] = self.params['b2']-learning_rate*grads['b2']
+      self.params['W2'] = self.params['W2']-learning_rate*grads['W2']
 
       if verbose and it % 100 == 0:
         train_acc = (self.predict(X_batch) == y_batch).mean()
@@ -231,12 +207,6 @@ class NeuralNetwork(object):
 
       # Every epoch, check train and val accuracy and decay learning rate.
       if it % iterations_per_epoch == 0:
-        # # Check accuracy
-        # train_acc = (self.predict(X_batch) == y_batch).mean()
-        # val_acc = (self.predict(X_val) == y_val).mean()
-        # train_acc_history.append(train_acc)
-        # val_acc_history.append(val_acc)
-
         # Decay learning rate
         learning_rate *= learning_rate_decay
 
@@ -260,11 +230,7 @@ class NeuralNetwork(object):
       to have class c, where 0 <= c < C.
     """
     y_pred = None
-
-    # ================================================================ #
-    # YOUR CODE HERE:
-    #   Predict the class given the input data.
-    # ================================================================ #
+    #TODO: implement code to predict the label given the input features.
     # get the scores
     W1, b1 = self.params['W1'], self.params['b1']
     W2, b2 = self.params['W2'], self.params['b2']
@@ -273,11 +239,4 @@ class NeuralNetwork(object):
     z2 = h1.dot(W2.T) + b2
     scores = z2
     y_pred = np.argmax(scores, axis = 1)
-
-
-
-    # ================================================================ #
-    # END YOUR CODE HERE
-    # ================================================================ #
-
     return y_pred

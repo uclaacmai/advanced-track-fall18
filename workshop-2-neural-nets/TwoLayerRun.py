@@ -11,5 +11,4 @@ if __name__ == '__main__':
     print('Rows: %d, columns: %d' % (X_train.shape[0], X_train.shape[1]))
     net = NeuralNetwork(input_size=X_train.shape[1], hidden_size=50, output_size=10)
     train_dict = net.train(X=X_train, y=y_train, X_val=X_test, y_val=y_test, num_iters=1000, verbose=True)
-    print(train_dict['train_acc_history'])
-    print(train_dict['val_acc_history'])
+    print('Final loss: {}, final training accuracy: {} final test accuracy: {}'.format(train_dict['loss_history'][-1], train_dict['train_acc_history'][-1], train_dict['val_acc_history'][-1]))
