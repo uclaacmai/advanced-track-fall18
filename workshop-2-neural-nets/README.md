@@ -1,6 +1,6 @@
 ### ACM AI Advanced Track Workshop 2: Building a 2 Layer Neural Network
 
-This is the coding portion of ACM AI's advanced track workshop #2 for winter quarter 2018. Slides for the workshop can be found [here](TODO link it)
+This is the coding portion of ACM AI's advanced track workshop #2 for winter quarter 2018. Slides for the workshop can be found [here](https://docs.google.com/presentation/d/1N4daeEii5rtRSXtHIZu0txGcWr2FU6VJRLi1NaeML2E/edit?usp=sharing)
 
 ### Usage
 
