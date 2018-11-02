@@ -6,7 +6,9 @@ Code, Slides, &amp; Materials for our Advanced Workshop Series, Fall Quarter 201
 #### Link to Slides Used
 
 *Workshop 1*: [https://tinyurl.com/aiadvancedf181](https://tinyurl.com/aiadvancedf181)
+
 *Workshop 2*: [https://tinyurl.com/aiadvancedf182](https://tinyurl.com/aiadvancedf182)
+
 *Workshop 3*: [https://tinyurl.com/aiadvancedf183](https://tinyurl.com/aiadvancedf183)
 
 #### Setup Instructions
